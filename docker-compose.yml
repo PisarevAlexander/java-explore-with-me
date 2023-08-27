@@ -34,11 +34,11 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
-#  ewm-service:
-#    build: ./server
-#    container_name: server
-#    ports:
-#      - "8080:8080"
-#
-#  ewm-db:
-#    image: postgres:13.7-alpine
+  ewm-service:
+    build: ./server
+    container_name: server
+    ports:
+      - "8080:8080"
+
+  ewm-db:
+    image: postgres:13.7-alpine
