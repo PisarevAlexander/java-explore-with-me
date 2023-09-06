@@ -26,36 +26,35 @@ public class Event {
     private String annotation;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ToString.Exclude
     private Category category;
 
-    @Column(name = "confirmedRequests", nullable = false)
+    @Column(name = "confirmedRequests")
     private Long confirmedRequests;
 
-    @Column(name = "createdOn", nullable = false)
+    @Column(name = "createdOn")
     private LocalDateTime createdOn;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "eventDate", nullable = false)
+    @Column(name = "eventDate")
     private LocalDateTime eventDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "initiator_id", nullable = false)
+    @JoinColumn(name = "initiator_id", referencedColumnName = "id")
     @ToString.Exclude
     private User initiator;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "location_id", nullable = false)
-    @ToString.Exclude
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
     @Column(name = "paid", nullable = false)
     private Boolean paid;
 
-    @Column(name = "participantLimit", nullable = false)
+    @Column(name = "participantLimit")
     private Long participantLimit;
 
     @Column(name = "publishedOn")

@@ -81,7 +81,7 @@ public class EventServiceImpl implements EventService {
     public Event findById(Long userId, Long eventId) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
-        return eventRepository.findByIdAndAndInitiator(eventId, user)
+        return eventRepository.findByIdAndInitiator(eventId, user)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
     }
 

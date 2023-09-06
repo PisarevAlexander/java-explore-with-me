@@ -39,9 +39,9 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request create(Long userId, Long eventId) {
         User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with Id=" + eventId + " not found"));
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
         if (event.getInitiator().equals(user)) {
             throw new ConflictException("User create this event");
         }
@@ -71,9 +71,9 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request update(Long userId, Long requestId) {
         User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
         Request request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NotFoundException("Request with Id=" + requestId + " not found"));
+                .orElseThrow(() -> new NotFoundException("Request with id=" + requestId + " not found"));
         if (!request.getRequester().equals(user)) {
             throw new BadRequestException("User must create event");
         }

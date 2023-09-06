@@ -1,5 +1,6 @@
 package ru.practicum.main_server.event.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,9 +31,9 @@ public class EventDto {
 
     @NotNull(message = "eventDate can't be null")
     @Future
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
-    @NotNull
     private Location location;
 
     private Boolean paid;

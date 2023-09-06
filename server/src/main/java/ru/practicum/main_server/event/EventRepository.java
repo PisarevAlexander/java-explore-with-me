@@ -20,13 +20,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Page<Event> findByInitiator(User initiator, Pageable pageable);
 
-    Optional<Event> findByIdAndAndInitiator(Long eventId, User userId);
+    Optional<Event> findByIdAndInitiator(Long eventId, User userId);
 
     @Query("SELECT new ru.practicum.main_server.event.model.Event(e.id, e.annotation, e.category, e.confirmedRequests," +
             "e.createdOn, e.description, e.eventDate, e.initiator, e.location, e.paid, e.participantLimit, e.publishedOn, " +
             "e.requestModeration, e.state, e.title, e.views) " +
             "FROM Event as e " +
-            "WHERE e.state = 'PUBLISHED' " +
+            "WHERE e.state = 1 " +
             "AND (COALESCE(:text, NULL) IS NULL OR (LOWER(e.annotation) LIKE LOWER(concat('%', :text, '%')) OR LOWER(e.description) LIKE LOWER(concat('%', :text, '%')))) " +
             "AND (COALESCE(:categories, NULL) IS NULL OR e.category.id IN :categories) " +
             "AND (COALESCE(:paid, NULL) IS NULL OR e.paid = :paid) " +
@@ -41,7 +41,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "e.createdOn, e.description, e.eventDate, e.initiator, e.location, e.paid, e.participantLimit, e.publishedOn, " +
             "e.requestModeration, e.state, e.title, e.views) " +
             "FROM Event as e " +
-            "WHERE e.state = 'PUBLISHED' " +
+            "WHERE e.state = 1 " +
             "AND (COALESCE(:text, NULL) IS NULL OR (LOWER(e.annotation) LIKE LOWER(concat('%', :text, '%')) OR LOWER(e.description) LIKE LOWER(concat('%', :text, '%')))) " +
             "AND (COALESCE(:categories, NULL) IS NULL OR e.category.id IN :categories) " +
             "AND (COALESCE(:paid, NULL) IS NULL OR e.paid = :paid) " +
