@@ -4,6 +4,7 @@ server:
 stats-client:
   url: ${STATS_CLIENT_URL}
 
+
 spring:
   sql:
     init:

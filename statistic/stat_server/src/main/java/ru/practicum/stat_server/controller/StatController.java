@@ -35,4 +35,8 @@ public class StatController {
         return statService.getStat(start, end, uris, unique);
     }
 
+    @GetMapping("/view/{eventId}")
+    public Long getView(@PathVariable long eventId) {
+        return statService.getView(eventId);
+    }
 }

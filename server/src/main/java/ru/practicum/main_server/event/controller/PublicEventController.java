@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_server.OffsetBasedPageRequest;
@@ -30,14 +31,19 @@ public class PublicEventController {
     public List<Event> findAllBySearch(@RequestParam(required = false) String text,
                                        @RequestParam(required = false) List<Integer> categories,
                                        @RequestParam(required = false) Boolean paid,
-                                       @RequestParam(required = false) LocalDateTime rangeStart,
-                                       @RequestParam(required = false) LocalDateTime rangeEnd,
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                        @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                        @RequestParam(required = false) SortValue sort,
                                        @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                        @Positive @RequestParam(defaultValue = "10") Integer size,
                                        HttpServletRequest request) {
-        Pageable pageable = new OffsetBasedPageRequest(from, size, Sort.by(sort.getTitle()).descending());
+        Pageable pageable;
+        if (sort != null) {
+            pageable = new OffsetBasedPageRequest(from, size, Sort.by(sort.getTitle()).descending());
+        } else {
+            pageable = new OffsetBasedPageRequest(from, size);
+        }
         log.info("Get sorted events");
         return eventService.findAllBySearch(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, pageable,
                 request);

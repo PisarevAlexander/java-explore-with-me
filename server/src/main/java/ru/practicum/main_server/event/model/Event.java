@@ -1,5 +1,6 @@
 package ru.practicum.main_server.event.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,41 +27,44 @@ public class Event {
     private String annotation;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id", nullable = false)
     @ToString.Exclude
     private Category category;
 
-    @Column(name = "confirmedRequests")
+    @Column(name = "confirmed_requests", nullable = false)
     private Long confirmedRequests;
 
-    @Column(name = "createdOn")
+    @Column(name = "created_on", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "eventDate")
+    @Column(name = "event_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "initiator_id", referencedColumnName = "id")
+    @JoinColumn(name = "initiator_id", nullable = false)
     @ToString.Exclude
     private User initiator;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
     @Column(name = "paid", nullable = false)
     private Boolean paid;
 
-    @Column(name = "participantLimit")
+    @Column(name = "participant_limit", nullable = false)
     private Long participantLimit;
 
-    @Column(name = "publishedOn")
+    @Column(name = "published_on")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
-    @Column(name = "requestModeration", nullable = false)
+    @Column(name = "request_moderation", nullable = false)
     private Boolean requestModeration;
 
     @Enumerated(EnumType.ORDINAL)

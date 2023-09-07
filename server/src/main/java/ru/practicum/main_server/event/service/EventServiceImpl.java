@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.main_server.category.model.Category;
 import ru.practicum.main_server.category.service.CategoryService;
-import ru.practicum.main_server.client.StatClient;
+import ru.practicum.main_server.client.StatServerClient;
 import ru.practicum.main_server.event.EventRepository;
 import ru.practicum.main_server.event.model.*;
 import ru.practicum.main_server.exception.BadRequestException;
@@ -22,6 +22,7 @@ import ru.practicum.main_server.user.model.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryService categoryService;
     private final LocationRepository locationRepository;
     private final RequestRepository requestRepository;
-    private final StatClient statClient;
+    private final StatServerClient statServerClient;
 
 
     @Transactional
@@ -88,14 +89,15 @@ public class EventServiceImpl implements EventService {
     @Transactional
     @Override
     public Event update(Long userId, Long eventId, EventUpdateDto eventUpdateDto) {
-        if (eventUpdateDto.getEventDate().isBefore(LocalDateTime.now())) {
+        if (eventUpdateDto.getEventDate() != null && eventUpdateDto.getEventDate()
+                .isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ConflictException("Event date must be in past");
         }
 
         Event event = findById(userId, eventId);
 
         if (event.getState().equals(PUBLISHED)) {
-            throw new ConflictException("Event is already published");
+            throw new NotFoundException("Event is already published");
         }
 
         if (eventUpdateDto.getStateAction() != null) {
@@ -156,7 +158,7 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("User may change only waiting requests");
         }
 
-        RequestUpdateDto requestUpdateDto = new RequestUpdateDto();
+        RequestUpdateDto requestUpdateDto = new RequestUpdateDto(new ArrayList<>(), new ArrayList<>());
         if (requestUpdateStatusDto.getStatus().equals(REJECTED)) {
             requests.forEach(request -> request.setStatus(REJECTED));
             requestUpdateDto.setRejectedRequests(requestRepository.saveAll(requests)
@@ -202,7 +204,7 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.toList());
         }
 
-        statClient.createStat(request);
+        statServerClient.createStat(request);
         return events.getContent();
     }
 
@@ -212,10 +214,11 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + id + " not found"));
         if (!event.getState().equals(PUBLISHED)) {
-            throw new ConflictException("Event must be published");
+            throw new NotFoundException("Event must be published");
         }
-        statClient.createStat(request);
-        return event;
+        statServerClient.createStat(request);
+        event.setViews(statServerClient.getView(event.getId()));
+        return eventRepository.save(event);
     }
 
     @Transactional

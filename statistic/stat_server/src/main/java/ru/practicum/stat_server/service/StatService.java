@@ -12,4 +12,6 @@ public interface StatService {
     Stat create(StatDto statDto);
 
     List<StatHitsDto> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique);
+
+    Long getView(long eventId);
 }

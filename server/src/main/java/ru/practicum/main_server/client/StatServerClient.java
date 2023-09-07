@@ -10,14 +10,15 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
 @Slf4j
-public class StatClient extends BaseClient {
+public class StatServerClient extends BaseServerClient {
 
     @Autowired
-    public StatClient(@Value("${stats-client.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatServerClient(@Value("${stats-client.url}") String serverUrl, RestTemplateBuilder builder) {
         super(builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
@@ -26,17 +27,20 @@ public class StatClient extends BaseClient {
     }
 
     public void createStat(HttpServletRequest request) {
-        StatDto statDto = new StatDto();
+        StatServerDto statDto = new StatServerDto();
         statDto.setIp(request.getRemoteAddr());
         statDto.setUri(request.getRequestURI());
         statDto.setTimestamp(LocalDateTime.now());
         statDto.setApp("ewm_service");
-        log.info("Get request to stat server ");
+        log.info("POST request to stat client");
         post("/hit", statDto);
     }
 
     public Long getView(Long eventId) {
-        String responseBody = Objects.requireNonNull(get("/view/" + eventId).getBody()).toString();
-        return Long.parseLong(responseBody);
+        Map<String, Object> parameters = Map.of(
+                "eventId", eventId
+        );
+            String responseBody = (Objects.requireNonNullElse(get("/view/{eventId}", parameters).getBody(), 0L)).toString();
+            return Long.parseLong(responseBody);
     }
 }

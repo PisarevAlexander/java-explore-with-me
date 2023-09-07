@@ -1,5 +1,6 @@
 package ru.practicum.main_server.event.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +26,7 @@ public class EventUpdateDto {
     @Size(max = 7000, message = "description size to long")
     private String description;
 
-    @NotNull(message = "eventDate can't be null")
-    @Future
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
     private Location location;
