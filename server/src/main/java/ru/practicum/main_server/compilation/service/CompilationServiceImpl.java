@@ -1,10 +1,12 @@
 package ru.practicum.main_server.compilation.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.main_server.compilation.CompilationRepository;
 import ru.practicum.main_server.compilation.model.Compilation;
+import ru.practicum.main_server.compilation.model.CompilationAdminDto;
 import ru.practicum.main_server.compilation.model.CompilationDto;
 import ru.practicum.main_server.compilation.model.CompilationMapper;
 import ru.practicum.main_server.event.EventRepository;
@@ -12,12 +14,14 @@ import ru.practicum.main_server.event.model.Event;
 import ru.practicum.main_server.exception.NotFoundException;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
@@ -26,8 +30,12 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     @Override
     public Compilation create(CompilationDto compilationDto) {
+        if (compilationDto.getEvents() == null) {
+            compilationDto.setEvents(new ArrayList<>());
+        }
         Compilation compilation = CompilationMapper.toCompilation(compilationDto);
-        compilation.setEvents(eventRepository.findAllById(compilationDto.getEvents()));
+        List<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
+        compilation.setEvents(events);
         return compilationRepository.save(compilation);
     }
 
@@ -41,18 +49,18 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Transactional
     @Override
-    public Compilation update(Long compId, CompilationDto compilationDto) {
+    public Compilation update(Long compId, CompilationAdminDto compilationAdminDto) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Compilation with id=" + compId + " not found"));
-        if (compilationDto.getEvents() != null) {
-            List<Event> events = eventRepository.findAllById(compilationDto.getEvents());
+        if (compilationAdminDto.getEvents() != null) {
+            List<Event> events = eventRepository.findAllById(compilationAdminDto.getEvents());
             compilation.setEvents(events);
         }
-        if (compilationDto.getTitle() != null) {
-            compilation.setPinned(compilationDto.getPinned());
+        if (compilationAdminDto.getTitle() != null) {
+            compilation.setTitle(compilationAdminDto.getTitle());
         }
-        if (compilationDto.getPinned() != null) {
-            compilation.setPinned(compilationDto.getPinned());
+        if (compilationAdminDto.getPinned() != null) {
+            compilation.setPinned(compilationAdminDto.getPinned());
         }
         return compilationRepository.save(compilation);
     }

@@ -5,7 +5,7 @@ import ru.practicum.main_server.event.model.Event;
 import ru.practicum.main_server.event.model.EventDto;
 import ru.practicum.main_server.event.model.EventState;
 import ru.practicum.main_server.event.model.EventUpdateDto;
-import ru.practicum.main_server.request.model.Request;
+import ru.practicum.main_server.request.model.RequestDto;
 import ru.practicum.main_server.request.model.RequestUpdateDto;
 import ru.practicum.main_server.request.model.RequestUpdateStatusDto;
 
@@ -23,7 +23,7 @@ public interface EventService {
 
     Event update(Long userId, Long eventId, EventUpdateDto eventUpdateDtoDto);
 
-    List<Request> findRequest(Long userId, Long eventId);
+    List<RequestDto> findRequest(Long userId, Long eventId);
 
     RequestUpdateDto updateRequest(Long userId, Long eventId, RequestUpdateStatusDto requestUpdateStatusDto);
 

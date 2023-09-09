@@ -3,6 +3,7 @@ package ru.practicum.main_server.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_server.OffsetBasedPageRequest;
@@ -10,7 +11,7 @@ import ru.practicum.main_server.event.model.Event;
 import ru.practicum.main_server.event.model.EventDto;
 import ru.practicum.main_server.event.model.EventUpdateDto;
 import ru.practicum.main_server.event.service.EventService;
-import ru.practicum.main_server.request.model.Request;
+import ru.practicum.main_server.request.model.RequestDto;
 import ru.practicum.main_server.request.model.RequestUpdateDto;
 import ru.practicum.main_server.request.model.RequestUpdateStatusDto;
 
@@ -38,6 +39,7 @@ public class PrivateEventController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Event create(@Valid @RequestBody EventDto eventDto, @PathVariable Long userId) {
         log.info("Create event by userId = {}", userId);
         return eventService.save(userId, eventDto);
@@ -57,7 +59,7 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}/requests")
-    public List<Request> findRequest(@PathVariable Long userId, @PathVariable Long eventId) {
+    public List<RequestDto> findRequest(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Get request for userId = {}, eventId = {}", userId, eventId);
         return eventService.findRequest(userId, eventId);
     }

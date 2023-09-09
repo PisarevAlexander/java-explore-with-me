@@ -2,6 +2,7 @@ package ru.practicum.main_server.category.service;
 
 import org.springframework.data.domain.Pageable;
 import ru.practicum.main_server.category.model.Category;
+import ru.practicum.main_server.category.model.CategoryAdminDto;
 import ru.practicum.main_server.category.model.CategoryDto;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface CategoryService {
 
     void delete(Integer catId);
 
-    Category update(Integer catId, CategoryDto categoryDto);
+    Category update(Integer catId, CategoryAdminDto categoryAdminDto);
 
     List<Category> getAll(Pageable pageable);
 

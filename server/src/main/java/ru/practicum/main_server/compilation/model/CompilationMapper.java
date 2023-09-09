@@ -5,8 +5,8 @@ public class CompilationMapper {
     public static Compilation toCompilation(CompilationDto compilationDto) {
         Compilation compilation = new Compilation();
         compilation.setTitle(compilationDto.getTitle());
+        compilation.setPinned(compilationDto.getPinned() != null ? compilationDto.getPinned() : Boolean.valueOf(false));
 
-        compilation.setPinned(compilationDto.getPinned() ? compilationDto.getPinned() : Boolean.valueOf(false));
         return compilation;
     }
 }

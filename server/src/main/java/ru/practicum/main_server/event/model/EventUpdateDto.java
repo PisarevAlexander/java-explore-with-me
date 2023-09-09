@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.main_server.location.Location;
 
+import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -27,8 +29,11 @@ public class EventUpdateDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
+    @Valid
     private Location location;
     private Boolean paid;
+
+    @PositiveOrZero
     private Long participantLimit;
     private Boolean requestModeration;
     private AdminState stateAction;

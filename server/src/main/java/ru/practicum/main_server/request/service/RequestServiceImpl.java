@@ -11,12 +11,16 @@ import ru.practicum.main_server.exception.ConflictException;
 import ru.practicum.main_server.exception.NotFoundException;
 import ru.practicum.main_server.request.RequestRepository;
 import ru.practicum.main_server.request.model.Request;
+import ru.practicum.main_server.request.model.RequestDto;
+import ru.practicum.main_server.request.model.RequestMapper;
 import ru.practicum.main_server.request.model.RequestStatus;
 import ru.practicum.main_server.user.UserRepository;
 import ru.practicum.main_server.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,26 +33,33 @@ public class RequestServiceImpl implements RequestService {
 
     @Transactional
     @Override
-    public List<Request> findAllByUser(Long userId) {
+    public List<RequestDto> findAllByUser(Long userId) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
-        return requestRepository.findAllByRequester(user);
+        List<Request> requests = requestRepository.findAllByRequester(user);
+        if (requests.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return requests.stream()
+                .map(RequestMapper::toRequestDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public Request create(Long userId, Long eventId) {
+    public RequestDto create(Long userId, Long eventId) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
+
         if (event.getInitiator().equals(user)) {
             throw new ConflictException("User create this event");
         }
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Event must be published");
         }
-        if (event.getParticipantLimit().equals(event.getConfirmedRequests())) {
+        if (event.getParticipantLimit() > 0 && event.getParticipantLimit().equals(event.getConfirmedRequests())) {
             throw new ConflictException("Limit request reached");
         }
         if (requestRepository.existsByRequesterAndEvent(user, event)) {
@@ -59,17 +70,19 @@ public class RequestServiceImpl implements RequestService {
         request.setCreated(LocalDateTime.now());
         request.setEvent(event);
         request.setRequester(user);
-        if (!event.getRequestModeration()) {
-            request.setStatus(RequestStatus.CONFIRMED);
-        } else {
+        if (event.getRequestModeration() && event.getParticipantLimit() > 0) {
             request.setStatus(RequestStatus.PENDING);
+        } else {
+            request.setStatus(RequestStatus.CONFIRMED);
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1L);
+            eventRepository.save(event);
         }
-        return requestRepository.save(request);
+        return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 
     @Transactional
     @Override
-    public Request update(Long userId, Long requestId) {
+    public RequestDto update(Long userId, Long requestId) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
         Request request = requestRepository.findById(requestId)
@@ -83,6 +96,6 @@ public class RequestServiceImpl implements RequestService {
             eventRepository.save(event);
         }
         request.setStatus(RequestStatus.CANCELED);
-        return request;
+        return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 }

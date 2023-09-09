@@ -2,7 +2,7 @@ package ru.practicum.main_server.event.model;
 
 public enum SortValue {
 
-    EVENT_DATE("event_date"),
+    EVENT_DATE("eventDate"),
     VIEWS("views");
 
     private String title;

@@ -3,8 +3,9 @@ package ru.practicum.main_server.category.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.practicum.main_server.category.model.Category;
 import ru.practicum.main_server.category.CategoryRepository;
+import ru.practicum.main_server.category.model.Category;
+import ru.practicum.main_server.category.model.CategoryAdminDto;
 import ru.practicum.main_server.category.model.CategoryDto;
 import ru.practicum.main_server.category.model.CategoryMapper;
 import ru.practicum.main_server.event.EventRepository;
@@ -26,6 +27,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public Category create(CategoryDto categoryDto) {
+        if (categoryRepository.findByName(categoryDto.getName()).isPresent()) {
+            throw new ConflictException("Name must be unique");
+        }
         return categoryRepository.save(CategoryMapper.toCategory(categoryDto));
     }
 
@@ -43,9 +47,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public Category update(Integer catId, CategoryDto categoryDto) {
+    public Category update(Integer catId, CategoryAdminDto categoryAdminDto) {
         Category category = findById(catId);
-        category.setName(categoryDto.getName());
+        if (category.getName().equals(categoryAdminDto.getName())) {
+            return category;
+        }
+        if (categoryRepository.findByName(categoryAdminDto.getName()).isPresent()) {
+            throw new ConflictException("Name must be unique");
+        }
+        category.setName(categoryAdminDto.getName());
         return categoryRepository.save(category);
     }
 

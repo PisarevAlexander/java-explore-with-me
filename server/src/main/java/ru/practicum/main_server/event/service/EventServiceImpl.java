@@ -91,41 +91,33 @@ public class EventServiceImpl implements EventService {
     public Event update(Long userId, Long eventId, EventUpdateDto eventUpdateDto) {
         if (eventUpdateDto.getEventDate() != null && eventUpdateDto.getEventDate()
                 .isBefore(LocalDateTime.now().plusHours(2))) {
-            throw new ConflictException("Event date must be in past");
+            throw new BadRequestException("Event date must be in past");
         }
 
         Event event = findById(userId, eventId);
 
         if (event.getState().equals(PUBLISHED)) {
-            throw new NotFoundException("Event is already published");
+            throw new ConflictException("Event is already published");
         }
 
         if (eventUpdateDto.getStateAction() != null) {
             switch (eventUpdateDto.getStateAction()) {
                 case CANCEL_REVIEW:
-                    if (!event.getState().equals(PENDING)) {
                         event.setState(CANCELED);
                         break;
-                    } else {
-                        throw new ConflictException("Event not pending");
-                    }
                 case SEND_TO_REVIEW:
-                    if (event.getState().equals(CANCELED)) {
                         event.setState(PENDING);
                         break;
-                    } else {
-                        throw new ConflictException("Event not cancel");
-                    }
                 default:
                     throw new ConflictException("State out of range");
             }
         }
-        return eventRepository.save(updateEvent(eventUpdateDto, event));
+        return updateEventCategoryLocation(eventUpdateDto, event);
     }
 
     @Transactional
     @Override
-    public List<Request> findRequest(Long userId, Long eventId) {
+    public List<RequestDto> findRequest(Long userId, Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
         User user = userRepository.findUserById(userId)
@@ -133,7 +125,14 @@ public class EventServiceImpl implements EventService {
         if (!event.getInitiator().equals(user)) {
             throw new ConflictException("User id=" + userId + " mot create event id=" + eventId);
         }
-        return requestRepository.findAllByRequesterAndEvent(user, event);
+
+        List<Request> requests = requestRepository.findAllByEvent(event);
+        if (requests.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return requests.stream()
+                .map(RequestMapper::toRequestDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -149,16 +148,19 @@ public class EventServiceImpl implements EventService {
         if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
             throw new ConflictException("Accept for request mot required");
         }
-        if (event.getParticipantLimit().equals(event.getConfirmedRequests())) {
+        if (event.getParticipantLimit() != 0 && event.getParticipantLimit().equals(requestRepository.findConfirmedRequests(eventId, CONFIRMED))) {
             throw new ConflictException("Limit of requests");
         }
+
         List<Request> requests = requestRepository.findAllByIdInAndStatus(requestUpdateStatusDto.getRequestIds(),
                 RequestStatus.PENDING);
+
         if (requests.isEmpty()) {
             throw new ConflictException("User may change only waiting requests");
         }
 
         RequestUpdateDto requestUpdateDto = new RequestUpdateDto(new ArrayList<>(), new ArrayList<>());
+
         if (requestUpdateStatusDto.getStatus().equals(REJECTED)) {
             requests.forEach(request -> request.setStatus(REJECTED));
             requestUpdateDto.setRejectedRequests(requestRepository.saveAll(requests)
@@ -166,6 +168,7 @@ public class EventServiceImpl implements EventService {
                     .map(RequestMapper::toRequestDto)
                     .collect(Collectors.toList()));
         }
+
         if (requestUpdateStatusDto.getStatus().equals(CONFIRMED)) {
             for (Request r : requests) {
                 if (event.getConfirmedRequests().equals(event.getParticipantLimit())) {
@@ -228,7 +231,6 @@ public class EventServiceImpl implements EventService {
         if (rangeEnd != null && rangeStart != null && rangeStart.isAfter(rangeEnd)) {
             throw new BadRequestException("Bad datetime range");
         }
-
         return eventRepository.findByAdminParameter(users, states, categories, rangeStart, rangeEnd, pageable)
                 .getContent();
     }
@@ -236,7 +238,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     @Override
     public Event updateEventByAdmin(Long eventId, EventUpdateDto eventUpdateDto) {
-        if (eventUpdateDto.getEventDate() != null && eventUpdateDto.getEventDate().isAfter(LocalDateTime.now().plusHours(1))) {
+        if (eventUpdateDto.getEventDate() != null && eventUpdateDto.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
             throw new BadRequestException("Bad datetime range");
         }
 
@@ -244,8 +246,8 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
 
         if (eventUpdateDto.getStateAction() != null) {
-            if (event.getState().equals(PUBLISHED)) {
-                throw new ConflictException("Event already published");
+            if (!event.getState().equals(PENDING)) {
+                throw new ConflictException("Event must be pending");
             }
             switch (eventUpdateDto.getStateAction()) {
                 case REJECT_EVENT:
@@ -259,10 +261,20 @@ public class EventServiceImpl implements EventService {
                     throw new ConflictException("State not valid");
             }
         }
-        return eventRepository.save(updateEvent(eventUpdateDto, event));
+        return updateEventCategoryLocation(eventUpdateDto, event);
     }
 
-    private Event updateEvent(EventUpdateDto eventUpdateDto, Event event) {
+    private Event updateEventCategoryLocation(EventUpdateDto eventUpdateDto, Event event) {
+        if (eventUpdateDto.getCategory() != null) {
+            event.setCategory(categoryService.findById(eventUpdateDto.getCategory()));
+        }
+        if (eventUpdateDto.getLocation() != null) {
+            System.out.println(eventUpdateDto.getLocation());
+            Location location = locationRepository.findByLatAndLon(eventUpdateDto.getLocation().getLat(),
+                            eventUpdateDto.getLocation().getLat())
+                    .orElseGet(() -> locationRepository.save(eventUpdateDto.getLocation()));
+            event.setLocation(location);
+        }
         if (eventUpdateDto.getCategory() != null) {
             event.setCategory(categoryService.findById(eventUpdateDto.getCategory()));
         }
@@ -287,6 +299,6 @@ public class EventServiceImpl implements EventService {
         if (eventUpdateDto.getTitle() != null) {
             event.setTitle(eventUpdateDto.getTitle());
         }
-        return event;
+        return eventRepository.save(event);
     }
 }

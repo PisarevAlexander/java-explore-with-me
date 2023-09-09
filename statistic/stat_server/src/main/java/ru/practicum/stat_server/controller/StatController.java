@@ -3,6 +3,7 @@ package ru.practicum.stat_server.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.stat_dto.StatDto;
 import ru.practicum.stat_server.service.StatService;
@@ -22,6 +23,7 @@ public class StatController {
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @PostMapping("/hit")
+    @ResponseStatus(HttpStatus.CREATED)
     public Stat createStat(@RequestBody StatDto statDto) {
         log.info("Post statistic request {}", statDto);
         return statService.create(statDto);

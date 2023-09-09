@@ -27,8 +27,6 @@ public class AdminEventController {
 
     private final EventService eventService;
 
-
-
     @GetMapping
     public List<Event> findEventsByAdmin(@RequestParam(required = false) List<Long> users,
                                          @RequestParam(required = false) List<EventState> states,
