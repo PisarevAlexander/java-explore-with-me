@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface StatRepository extends JpaRepository<Stat, Long> {
+public interface StatisticRepository extends JpaRepository<Stat, Long> {
 
     @Query("SELECT new ru.practicum.stat_server.stat.StatHitsDto(s.app, s.uri, count(distinct s.ip)) " +
             "FROM Stat as s " +
@@ -41,4 +41,12 @@ public interface StatRepository extends JpaRepository<Stat, Long> {
             "GROUP BY s.app, s.uri " +
             "ORDER BY count(s.ip) desc")
     List<StatHitsDto> findAllByNotUniqueIp(LocalDateTime start, LocalDateTime end);
+
+
+    @Query("SELECT new ru.practicum.stat_server.stat.StatHitsDto(s.app, s.uri, count(distinct s.ip)) " +
+            "FROM Stat as s " +
+            "WHERE s.uri = ?1 " +
+            "GROUP BY s.app, s.uri " +
+            "ORDER BY count(distinct s.ip)")
+    List<StatHitsDto> countDistinctByUri(String s);
 }

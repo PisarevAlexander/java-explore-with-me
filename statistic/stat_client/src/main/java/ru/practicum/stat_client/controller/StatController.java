@@ -39,4 +39,9 @@ public class StatController {
         log.info("Get statistic request");
         return statClient.getStat(start, end, uris, unique);
     }
+
+    @GetMapping("/view/{eventId}")
+    public ResponseEntity<Object> findView(@PathVariable Long eventId) {
+        return statClient.findView(eventId);
+    }
 }
