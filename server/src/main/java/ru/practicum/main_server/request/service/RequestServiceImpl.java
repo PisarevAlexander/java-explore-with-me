@@ -31,7 +31,6 @@ public class RequestServiceImpl implements RequestService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
-    @Transactional
     @Override
     public List<RequestDto> findAllByUser(Long userId) {
         User user = userRepository.findUserById(userId)
@@ -45,7 +44,6 @@ public class RequestServiceImpl implements RequestService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public RequestDto create(Long userId, Long eventId) {
         User user = userRepository.findUserById(userId)
@@ -80,7 +78,6 @@ public class RequestServiceImpl implements RequestService {
         return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 
-    @Transactional
     @Override
     public RequestDto update(Long userId, Long requestId) {
         User user = userRepository.findUserById(userId)

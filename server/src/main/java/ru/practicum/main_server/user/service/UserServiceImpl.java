@@ -20,7 +20,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
 
-    @Transactional
     @Override
     public User create(UserDto userDto) {
         if (repository.findByName(userDto.getName()).isPresent()) {
@@ -29,7 +28,6 @@ public class UserServiceImpl implements UserService {
         return repository.save(UserMapper.toUser(userDto));
     }
 
-    @Transactional
     @Override
     public List<User> getAll(List<Long> ids, Pageable pageable) {
         if (ids != null) {
@@ -38,7 +36,6 @@ public class UserServiceImpl implements UserService {
         return repository.findAll(pageable).getContent();
     }
 
-    @Transactional
     @Override
     public void delete(Long userId) {
         repository.findUserById(userId)

@@ -42,8 +42,6 @@ public class EventServiceImpl implements EventService {
     private final RequestRepository requestRepository;
     private final StatServerClient statServerClient;
 
-
-    @Transactional
     @Override
     public List<Event> findAll(Long userId, Pageable pageable) {
         User user = userRepository.findUserById(userId)
@@ -51,7 +49,6 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findByInitiator(user, pageable).getContent();
     }
 
-    @Transactional
     @Override
     public Event save(Long userId, EventDto eventDto) {
         if (eventDto.getEventDate().isBefore(LocalDateTime.now())) {
@@ -77,7 +74,6 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
-    @Transactional
     @Override
     public Event findById(Long userId, Long eventId) {
         User user = userRepository.findUserById(userId)
@@ -86,7 +82,6 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
     }
 
-    @Transactional
     @Override
     public Event update(Long userId, Long eventId, EventUpdateDto eventUpdateDto) {
         if (eventUpdateDto.getEventDate() != null && eventUpdateDto.getEventDate()
@@ -115,7 +110,6 @@ public class EventServiceImpl implements EventService {
         return updateEventCategoryLocation(eventUpdateDto, event);
     }
 
-    @Transactional
     @Override
     public List<RequestDto> findRequest(Long userId, Long eventId) {
         Event event = eventRepository.findById(eventId)
@@ -135,7 +129,6 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public RequestUpdateDto updateRequest(Long userId, Long eventId, RequestUpdateStatusDto requestUpdateStatusDto) {
         Event event = eventRepository.findById(eventId)
@@ -159,7 +152,7 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("User may change only waiting requests");
         }
 
-        RequestUpdateDto requestUpdateDto = new RequestUpdateDto(new ArrayList<>(), new ArrayList<>());
+        RequestUpdateDto requestUpdateDto = new RequestUpdateDto();
 
         if (requestUpdateStatusDto.getStatus().equals(REJECTED)) {
             requests.forEach(request -> request.setStatus(REJECTED));
@@ -185,7 +178,6 @@ public class EventServiceImpl implements EventService {
         return requestUpdateDto;
     }
 
-    @Transactional
     @Override
     public List<Event> findAllBySearch(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart,
                                        LocalDateTime rangeEnd, Boolean onlyAvailable, Pageable pageable,
@@ -211,7 +203,6 @@ public class EventServiceImpl implements EventService {
         return events.getContent();
     }
 
-    @Transactional
     @Override
     public Event findEventById(Long id, HttpServletRequest request) {
         Event event = eventRepository.findById(id)
@@ -224,7 +215,6 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
-    @Transactional
     @Override
     public List<Event> findEventsByAdmin(List<Long> users, List<EventState> states, List<Integer> categories,
                                          LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable) {
@@ -235,7 +225,6 @@ public class EventServiceImpl implements EventService {
                 .getContent();
     }
 
-    @Transactional
     @Override
     public Event updateEventByAdmin(Long eventId, EventUpdateDto eventUpdateDto) {
         if (eventUpdateDto.getEventDate() != null && eventUpdateDto.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {

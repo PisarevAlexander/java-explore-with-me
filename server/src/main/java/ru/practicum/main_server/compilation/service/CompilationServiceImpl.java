@@ -1,7 +1,6 @@
 package ru.practicum.main_server.compilation.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.main_server.compilation.CompilationRepository;
@@ -14,32 +13,25 @@ import ru.practicum.main_server.event.model.Event;
 import ru.practicum.main_server.exception.NotFoundException;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
 
-    @Transactional
     @Override
     public Compilation create(CompilationDto compilationDto) {
-        if (compilationDto.getEvents() == null) {
-            compilationDto.setEvents(new ArrayList<>());
-        }
         Compilation compilation = CompilationMapper.toCompilation(compilationDto);
         List<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         compilation.setEvents(events);
         return compilationRepository.save(compilation);
     }
 
-    @Transactional
     @Override
     public void delete(Long compId) {
         compilationRepository.findById(compId)
@@ -47,7 +39,6 @@ public class CompilationServiceImpl implements CompilationService {
         compilationRepository.deleteById(compId);
     }
 
-    @Transactional
     @Override
     public Compilation update(Long compId, CompilationAdminDto compilationAdminDto) {
         Compilation compilation = compilationRepository.findById(compId)
@@ -65,7 +56,6 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationRepository.save(compilation);
     }
 
-    @Transactional
     @Override
     public Collection<Compilation> findAll(Boolean pinned, Pageable pageable) {
         if (pinned != null) {
@@ -75,7 +65,6 @@ public class CompilationServiceImpl implements CompilationService {
         }
     }
 
-    @Transactional
     @Override
     public Compilation findById(Long compId) {
         return compilationRepository.findById(compId)

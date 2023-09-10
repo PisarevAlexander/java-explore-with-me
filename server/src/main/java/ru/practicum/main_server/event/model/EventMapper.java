@@ -11,11 +11,11 @@ public class EventMapper {
         event.setRequestModeration(eventDto.getRequestModeration());
         event.setTitle(eventDto.getTitle());
 
-        event.setPaid(eventDto.getPaid() == null ? Boolean.valueOf(false) : eventDto.getPaid());
+        event.setPaid(eventDto.getPaid() == null ? false : eventDto.getPaid());
 
-        event.setParticipantLimit(eventDto.getParticipantLimit() == null ? Long.valueOf(0L) : eventDto.getParticipantLimit());
+        event.setParticipantLimit(eventDto.getParticipantLimit() == null ? 0L : eventDto.getParticipantLimit());
 
-        event.setRequestModeration(eventDto.getRequestModeration() == null ? Boolean.valueOf(true) : eventDto.getRequestModeration());
+        event.setRequestModeration(eventDto.getRequestModeration() == null ? true : eventDto.getRequestModeration());
 
         return event;
     }

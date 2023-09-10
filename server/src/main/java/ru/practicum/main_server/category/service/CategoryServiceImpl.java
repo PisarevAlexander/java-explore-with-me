@@ -24,7 +24,6 @@ public class CategoryServiceImpl implements CategoryService {
     public final CategoryRepository categoryRepository;
     public final EventRepository eventRepository;
 
-    @Transactional
     @Override
     public Category create(CategoryDto categoryDto) {
         if (categoryRepository.findByName(categoryDto.getName()).isPresent()) {
@@ -33,7 +32,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(CategoryMapper.toCategory(categoryDto));
     }
 
-    @Transactional
     @Override
     public void delete(Integer catId) {
         Category category = findById(catId);
@@ -45,7 +43,6 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    @Transactional
     @Override
     public Category update(Integer catId, CategoryAdminDto categoryAdminDto) {
         Category category = findById(catId);
@@ -59,13 +56,11 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    @Transactional
     @Override
     public List<Category> getAll(Pageable pageable) {
         return categoryRepository.findAll(pageable).getContent();
     }
 
-    @Transactional
     @Override
     public Category findById(Integer catId) {
         return categoryRepository.findCategoriesById(catId)
