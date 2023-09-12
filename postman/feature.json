@@ -8,250 +8,6 @@
 	},
 	"item": [
 		{
-			"name": "Precondition",
-			"item": [
-				{
-					"name": "Create User 1",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function() {\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody; \r",
-									"    pm.response.to.be.json; \r",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Pisarev Alexander\",\r\n    \"email\": \"alexander@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/admin/users",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"admin",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create User 2",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function() {\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody; \r",
-									"    pm.response.to.be.json; \r",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Vasy Pupkin\",\r\n    \"email\": \"vasypupkin@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/admin/users",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"admin",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Category",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function() {\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody; \r",
-									"    pm.response.to.be.json; \r",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"testcategory\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/admin/categories",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"admin",
-								"categories"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Event 1",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function() {\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody; \r",
-									"    pm.response.to.be.json; \r",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"annotation\": \"Perspiciatis quia eveniet\",\r\n    \"category\": 1,\r\n    \"description\": \"Explicabo voluptate consequuntur eum\",\r\n    \"eventDate\": \"2023-09-13 01:07:11\",\r\n    \"location\": {\r\n        \"lat\": -35.1645,\r\n        \"lon\": -171.655\r\n    },\r\n    \"paid\": \"false\",\r\n    \"participantLimit\": \"86\",\r\n    \"requestModeration\": \"true\",\r\n    \"title\": \"Odio vero consequuntur incidunt voluptatibus.\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/:userId/events",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								":userId",
-								"events"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Event 2",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function() {\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody; \r",
-									"    pm.response.to.be.json; \r",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"annotation\": \"Perspiciatis quia eveniet 2\",\r\n    \"category\": 1,\r\n    \"description\": \"Explicabo voluptate consequuntur eum\",\r\n    \"eventDate\": \"2100-09-13 01:07:11\",\r\n    \"location\": {\r\n        \"lat\": -35.1645,\r\n        \"lon\": -171.655\r\n    },\r\n    \"paid\": \"false\",\r\n    \"participantLimit\": \"0\",\r\n    \"requestModeration\": \"false\",\r\n    \"title\": \"Odio vero consequuntur incidunt voluptatibus.\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/:userId/events",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								":userId",
-								"events"
-							],
-							"variable": [
-								{
-									"key": "userId",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Create comments",
 			"item": [
 				{
@@ -409,7 +165,7 @@
 								},
 								{
 									"key": "eventId",
-									"value": "100"
+									"value": "1000"
 								}
 							]
 						}
@@ -459,7 +215,7 @@
 							"variable": [
 								{
 									"key": "userId",
-									"value": "100"
+									"value": "999"
 								},
 								{
 									"key": "eventId",
@@ -1169,7 +925,7 @@
 			]
 		},
 		{
-			"name": "Get cmments",
+			"name": "Get comments",
 			"item": [
 				{
 					"name": "Get from public",
