@@ -15,11 +15,13 @@ import java.util.List;
 
 public interface EventService {
 
+    Event getById(Long eventId);
+
     List<Event> findAll(Long userId, Pageable pageable);
 
     Event save(Long userId, EventDto eventDto);
 
-    Event findById(Long userId, Long eventId);
+    Event findByEventAndUserId(Long userId, Long eventId);
 
     Event update(Long userId, Long eventId, EventUpdateDto eventUpdateDtoDto);
 

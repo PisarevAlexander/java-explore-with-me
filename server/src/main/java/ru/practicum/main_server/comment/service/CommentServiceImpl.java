@@ -8,12 +8,12 @@ import ru.practicum.main_server.comment.model.Comment;
 import ru.practicum.main_server.comment.model.CommentDto;
 import ru.practicum.main_server.comment.model.CommentMapper;
 import ru.practicum.main_server.comment.model.CommentReturnDto;
-import ru.practicum.main_server.event.EventRepository;
 import ru.practicum.main_server.event.model.Event;
+import ru.practicum.main_server.event.service.EventService;
 import ru.practicum.main_server.exception.BadRequestException;
 import ru.practicum.main_server.exception.NotFoundException;
-import ru.practicum.main_server.user.UserRepository;
 import ru.practicum.main_server.user.model.User;
+import ru.practicum.main_server.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -27,13 +27,16 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-    private final EventRepository eventRepository;
+    private final UserService userService;
+    private final EventService eventService;
 
     @Override
     public void deleteByAdmin(Long commentId) {
-        commentRepository.delete(commentRepository.findById(commentId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + commentId + " not found")));
+        commentRepository.findById(commentId)
+                .ifPresentOrElse(commentRepository::delete,
+                        () -> {
+                            throw new NotFoundException("Comment with Id=" + commentId + " not found");
+                        });
     }
 
     @Override
@@ -48,8 +51,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentReturnDto> getAll(Long eventId, Pageable pageable) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
+        Event event = eventService.getById(eventId);
         List<Comment> comments = commentRepository.findAllByEvent(event, pageable).getContent();
 
         if (comments.isEmpty()) {
@@ -62,10 +64,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentReturnDto save(CommentDto commentDto, Long userId, Long eventId) {
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
+        User user = userService.getById(userId);
+        Event event = eventService.getById(eventId);
 
         Comment comment = new Comment();
         comment.setCreated(LocalDateTime.now());
@@ -77,8 +77,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentReturnDto updateByUser(CommentDto commentDto, Long userId, Long commentId) {
-        userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+        userService.getById(userId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("User with Id=" + commentId + " not found"));
 

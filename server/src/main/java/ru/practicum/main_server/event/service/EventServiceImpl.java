@@ -16,8 +16,8 @@ import ru.practicum.main_server.location.Location;
 import ru.practicum.main_server.location.LocationRepository;
 import ru.practicum.main_server.request.RequestRepository;
 import ru.practicum.main_server.request.model.*;
-import ru.practicum.main_server.user.UserRepository;
 import ru.practicum.main_server.user.model.User;
+import ru.practicum.main_server.user.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -36,7 +36,7 @@ import static ru.practicum.main_server.request.model.RequestStatus.REJECTED;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final CategoryService categoryService;
     private final LocationRepository locationRepository;
     private final RequestRepository requestRepository;
@@ -44,8 +44,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findAll(Long userId, Pageable pageable) {
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
+        User user = userService.getById(userId);
         return eventRepository.findByInitiator(user, pageable).getContent();
     }
 
@@ -55,14 +54,12 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Event date must be in past");
         }
 
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
-
+        User user = userService.getById(userId);
         Category category = categoryService.findById(eventDto.getCategory());
-
         Location location = locationRepository.findByLatAndLon(eventDto.getLocation().getLat(),
-                eventDto.getLocation().getLon())
+                        eventDto.getLocation().getLon())
                 .orElseGet(() -> locationRepository.save(eventDto.getLocation()));
+
         eventDto.setLocation(location);
         Event event = EventMapper.toEvent(eventDto);
         event.setInitiator(user);
@@ -75,10 +72,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event findById(Long userId, Long eventId) {
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+    public Event findByEventAndUserId(Long userId, Long eventId) {
+        User user = userService.getById(userId);
         return eventRepository.findByIdAndInitiator(eventId, user)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
+    }
+
+    @Override
+    public Event getById(Long eventId) {
+        return eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
     }
 
@@ -89,7 +91,7 @@ public class EventServiceImpl implements EventService {
             throw new BadRequestException("Event date must be in past");
         }
 
-        Event event = findById(userId, eventId);
+        Event event = findByEventAndUserId(userId, eventId);
 
         if (event.getState().equals(PUBLISHED)) {
             throw new ConflictException("Event is already published");
@@ -98,11 +100,11 @@ public class EventServiceImpl implements EventService {
         if (eventUpdateDto.getStateAction() != null) {
             switch (eventUpdateDto.getStateAction()) {
                 case CANCEL_REVIEW:
-                        event.setState(CANCELED);
-                        break;
+                    event.setState(CANCELED);
+                    break;
                 case SEND_TO_REVIEW:
-                        event.setState(PENDING);
-                        break;
+                    event.setState(PENDING);
+                    break;
                 default:
                     throw new ConflictException("State out of range");
             }
@@ -114,8 +116,7 @@ public class EventServiceImpl implements EventService {
     public List<RequestDto> findRequest(Long userId, Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+        User user = userService.getById(userId);
         if (!event.getInitiator().equals(user)) {
             throw new ConflictException("User id=" + userId + " mot create event id=" + eventId);
         }
@@ -133,8 +134,8 @@ public class EventServiceImpl implements EventService {
     public RequestUpdateDto updateRequest(Long userId, Long eventId, RequestUpdateStatusDto requestUpdateStatusDto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+        User user = userService.getById(userId);
+
         if (!event.getInitiator().equals(user)) {
             throw new ConflictException("User id=" + userId + " mot create event id=" + eventId);
         }
