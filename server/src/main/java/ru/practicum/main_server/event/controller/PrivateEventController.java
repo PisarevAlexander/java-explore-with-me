@@ -48,7 +48,7 @@ public class PrivateEventController {
     @GetMapping("/{eventId}")
     public Event findById(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Get event by userId = {}, eventId = {}", userId, eventId);
-        return eventService.findById(userId, eventId);
+        return eventService.findByEventAndUserId(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")

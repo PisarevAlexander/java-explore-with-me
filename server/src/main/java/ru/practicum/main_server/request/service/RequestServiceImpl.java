@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_server.event.EventRepository;
 import ru.practicum.main_server.event.model.Event;
 import ru.practicum.main_server.event.model.EventState;
+import ru.practicum.main_server.event.service.EventService;
 import ru.practicum.main_server.exception.BadRequestException;
 import ru.practicum.main_server.exception.ConflictException;
 import ru.practicum.main_server.exception.NotFoundException;
@@ -14,8 +15,8 @@ import ru.practicum.main_server.request.model.Request;
 import ru.practicum.main_server.request.model.RequestDto;
 import ru.practicum.main_server.request.model.RequestMapper;
 import ru.practicum.main_server.request.model.RequestStatus;
-import ru.practicum.main_server.user.UserRepository;
 import ru.practicum.main_server.user.model.User;
+import ru.practicum.main_server.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,13 +29,13 @@ import java.util.stream.Collectors;
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final EventService eventService;
     private final EventRepository eventRepository;
 
     @Override
     public List<RequestDto> findAllByUser(Long userId) {
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+        User user = userService.getById(userId);
         List<Request> requests = requestRepository.findAllByRequester(user);
         if (requests.isEmpty()) {
             return new ArrayList<>();
@@ -46,10 +47,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestDto create(Long userId, Long eventId) {
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " not found"));
+        User user = userService.getById(userId);
+        Event event = eventService.getById(eventId);
 
         if (event.getInitiator().equals(user)) {
             throw new ConflictException("User create this event");
@@ -80,8 +79,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestDto update(Long userId, Long requestId) {
-        User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
+        User user = userService.getById(userId);
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Request with id=" + requestId + " not found"));
         if (!request.getRequester().equals(user)) {

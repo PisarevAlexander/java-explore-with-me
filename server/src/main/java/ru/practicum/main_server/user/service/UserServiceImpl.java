@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getById(Long userId) {
+        return repository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
+    }
+
+    @Override
     public List<User> getAll(List<Long> ids, Pageable pageable) {
         if (ids != null) {
             return repository.findAllByIdIn(ids, pageable).getContent();
@@ -38,8 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long userId) {
-        repository.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User with id=" + userId + " not found"));
+        getById(userId);
         repository.deleteById(userId);
     }
 }
