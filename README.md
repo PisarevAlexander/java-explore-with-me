@@ -9,7 +9,7 @@
 ### Server
 - **public** - доступен без регистрации любому пользователю сети;
 - **private** - доступен только авторизованным пользователям;
-- **admin** — для администраторов сервиса.
+- **admin** - для администраторов сервиса.
 
 ### Statistic
 Cобирает информацию. Во-первых, о количестве обращений пользователей к спискам событий и, во-вторых, о количестве запросов к подробной информации о событии. На основе этой информации формируется статистика о работе приложения.
@@ -17,6 +17,9 @@ Cобирает информацию. Во-первых, о количестве
 ## Swagger
 - Cпецификация основного сервиса: [ewm-main-service-spec](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-main-service-spec.json)
 - Cпецификация сервиса статистики [ewm-stats-service](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-stats-service-spec.json)
+
+## Launch
+Используйте docker-compose up для развертывания приложения.
 
 ## Stack
 - Java 11;
