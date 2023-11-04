@@ -10,7 +10,7 @@
 
     <parent>
         <artifactId>explore-with-me</artifactId>
-        <groupId>ru.practicum</groupId>
+        <groupId>explore_with_me</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
