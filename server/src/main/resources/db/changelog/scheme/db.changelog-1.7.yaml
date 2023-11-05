@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: Pisarev_Alexander
+      changes:
+        -  addUniqueConstraint:
+             tableName: event_compilation
+             constraintName: uq_event_compilation
+             columnNames: compilation_id, event_id
+             validate: true

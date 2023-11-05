@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: Pisarev_Alexander
+      changes:
+        - createTable:
+            tableName: compilations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: pinned
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(50)
+                  constraints:
+                    nullable: false

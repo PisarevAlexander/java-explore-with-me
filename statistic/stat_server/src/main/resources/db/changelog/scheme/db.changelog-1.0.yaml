@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Pisarev_Alexander
+      changes:
+        - createTable:
+            tableName: stats
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: app
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uri
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ip
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: timestamp
+                  type: timestamp without time zone
+                  constraints:
+                    nullable: false

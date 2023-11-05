@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: Pisarev_Alexander
+      changes:
+        - createTable:
+            tableName: locations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: lat
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lon
+                  type: float
+                  constraints:
+                    nullable: false

@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: Pisarev_Alexander
+      changes:
+        - createTable:
+            tableName: event_compilation
+            columns:
+              - column:
+                  name: compilation_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_event_compilation
+                    references: compilations(id)
+                    deleteCascade: true
+              - column:
+                  name: event_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_event_compilation_1
+                    references: events(id)
+                    deleteCascade: true
