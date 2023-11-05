@@ -36,6 +36,7 @@ public class PrivateEventController {
 
     /**
      * Find all list
+     * GET users/{userId}/events
      * @param userId the user id
      * @param from   the from
      * @param size   the size
@@ -53,6 +54,7 @@ public class PrivateEventController {
 
     /**
      * Create event
+     * POST users/{userId}/events
      * @param eventDto the event dto
      * @param userId   the user id
      * @return the event json
@@ -67,6 +69,7 @@ public class PrivateEventController {
 
     /**
      * Find event by id
+     * GET users/{userId}/events/{eventId}
      * @param userId  the user id
      * @param eventId the event id
      * @return the event json
@@ -80,6 +83,7 @@ public class PrivateEventController {
 
     /**
      * Update event by id
+     * PATCH users/{userId}/events/{eventId}
      * @param userId            the user id
      * @param eventId           the event id
      * @param eventUpdateDtoDto the event update DTO
@@ -95,6 +99,7 @@ public class PrivateEventController {
 
     /**
      * Find requests
+     * GET users/{userId}/events/{eventId}/requests
      * @param userId  the user id
      * @param eventId the event id
      * @return the list of requests json
@@ -108,6 +113,7 @@ public class PrivateEventController {
 
     /**
      * Update request
+     * PATCH users/{userId}/events/{eventId}/requests
      * @param userId                 the user id
      * @param eventId                the event id
      * @param requestUpdateStatusDto the request update status dto

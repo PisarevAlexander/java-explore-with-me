@@ -33,6 +33,7 @@ public class PublicEventController {
 
     /**
      * Find all events by search
+     * GET events
      * @param text          the text
      * @param categories    the categories list
      * @param paid          the paid
@@ -70,6 +71,7 @@ public class PublicEventController {
 
     /**
      * Find event by id
+     * GET events/{id}
      * @param id      the id
      * @param request the request
      * @return the event json

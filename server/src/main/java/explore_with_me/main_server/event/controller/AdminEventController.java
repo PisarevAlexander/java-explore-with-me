@@ -33,6 +33,7 @@ public class AdminEventController {
 
     /**
      * Find events by admin
+     * GET admin/events
      * @param users      the users list
      * @param states     the states list
      * @param categories the categories list
@@ -58,6 +59,7 @@ public class AdminEventController {
 
     /**
      * Update event by admin
+     * GET admin/events/{eventId}
      * @param eventId        the event id
      * @param eventUpdateDto the event update DTO
      * @return the event json

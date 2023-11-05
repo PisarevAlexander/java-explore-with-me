@@ -26,6 +26,7 @@ public class PublicCompilationController {
 
     /**
      * Find all compilation
+     * GET /compilations
      * @param pinned the pinned
      * @param from   the from
      * @param size   the size
@@ -43,6 +44,7 @@ public class PublicCompilationController {
 
     /**
      * Find  compilation by id
+     * GET /compilations/{compId}
      * @param compId the compilation id
      * @return the compilation json
      */
