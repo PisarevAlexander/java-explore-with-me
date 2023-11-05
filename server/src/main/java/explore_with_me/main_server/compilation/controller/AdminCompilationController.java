@@ -12,6 +12,10 @@ import explore_with_me.main_server.compilation.service.CompilationService;
 
 import javax.validation.Valid;
 
+/**
+ * Admin compilation controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/compilations")
@@ -21,6 +25,13 @@ public class AdminCompilationController {
 
     private final CompilationService compilationService;
 
+    /**
+     * Create compilation
+     * POST /admin/compilations
+     * @param compilationDto the compilation DTO
+     * @return the compilation json
+     */
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Compilation create(@Valid @RequestBody CompilationDto compilationDto) {
@@ -28,12 +39,26 @@ public class AdminCompilationController {
         return compilationService.create(compilationDto);
     }
 
+    /**
+     * Delete compilation
+     * DELETE /admin/compilations/{compId}
+     * @param compId the compilation id
+     */
+
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long compId) {
         log.info("Delete compilation id={}", compId);
         compilationService.delete(compId);
     }
+
+    /**
+     * Update compilation
+     * PATCH /admin/compilations/{compId}
+     * @param compId              the compilation id
+     * @param compilationAdminDto the compilation admin DTO
+     * @return the compilation json
+     */
 
     @PatchMapping("/{compId}")
     public Compilation update(@PathVariable Long compId,

@@ -8,17 +8,41 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base client
+ */
+
 public class BaseClient {
 
     protected final RestTemplate rest;
+
+    /**
+     * Instantiates a new Base client
+     * @param rest the rest
+     */
 
     public BaseClient(RestTemplate rest) {
         this.rest = rest;
     }
 
+    /**
+     * Get response entity
+     * @param path       the path
+     * @param parameters the parameters
+     * @return the response entity
+     */
+
     protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {
         return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
     }
+
+    /**
+     * Post response entity
+     * @param <T>  the type parameter
+     * @param path the path
+     * @param body the body
+     * @return the response entity
+     */
 
     protected <T> ResponseEntity<Object> post(String path, T body) {
         return makeAndSendRequest(HttpMethod.POST, path, null, body);

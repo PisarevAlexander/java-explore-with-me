@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * User object
+ */
+
 @Entity
 @Table(name = "users")
 @Data

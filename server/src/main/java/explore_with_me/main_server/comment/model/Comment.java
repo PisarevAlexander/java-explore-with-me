@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Comment object
+ */
+
 @Entity
 @Table(name = "comments")
 @Data

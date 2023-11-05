@@ -12,6 +12,10 @@ import explore_with_me.main_server.user.model.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Event object
+ */
+
 @Entity
 @Table(name = "events")
 @Data

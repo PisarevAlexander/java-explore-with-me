@@ -18,6 +18,10 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Admin event controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("admin/events")
@@ -26,6 +30,18 @@ import java.util.List;
 public class AdminEventController {
 
     private final EventService eventService;
+
+    /**
+     * Find events by admin
+     * @param users      the users list
+     * @param states     the states list
+     * @param categories the categories list
+     * @param rangeStart the range start
+     * @param rangeEnd   the range end
+     * @param from       the from
+     * @param size       the size
+     * @return the list of events json
+     */
 
     @GetMapping
     public List<Event> findEventsByAdmin(@RequestParam(required = false) List<Long> users,
@@ -39,6 +55,13 @@ public class AdminEventController {
         log.info("Get sorted events by admin");
         return eventService.findEventsByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
     }
+
+    /**
+     * Update event by admin
+     * @param eventId        the event id
+     * @param eventUpdateDto the event update DTO
+     * @return the event json
+     */
 
     @PatchMapping("/{eventId}")
     public Event updateEventByAdmin(@PathVariable Long eventId, @Valid @RequestBody EventUpdateDto eventUpdateDto) {

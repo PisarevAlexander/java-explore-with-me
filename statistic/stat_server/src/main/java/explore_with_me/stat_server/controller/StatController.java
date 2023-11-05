@@ -13,6 +13,10 @@ import explore_with_me.stat_dto.StatDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Stat controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
@@ -20,7 +24,19 @@ import java.util.List;
 public class StatController {
 
     private final StatService statService;
+
+    /**
+     * The constant DATE_FORMAT.
+     */
+
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * Create stat stat.
+     * POST /hit
+     * @param statDto the stat dto
+     * @return the stat
+     */
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,6 +45,16 @@ public class StatController {
         return statService.create(statDto);
     }
 
+    /**
+     * Gets stats
+     * GET /stats
+     * @param start  the start
+     * @param end    the end
+     * @param uris   the uris
+     * @param unique the unique
+     * @return the stats
+     */
+
     @GetMapping("/stats")
     public List<StatHitsDto> getStats(@RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime start,
                                       @RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime end,
@@ -36,6 +62,13 @@ public class StatController {
         log.info("Get statistic request");
         return statService.getStat(start, end, uris, unique);
     }
+
+    /**
+     * Gets view.
+     * GET /view/{eventId}
+     * @param eventId the event id
+     * @return the view
+     */
 
     @GetMapping("/view/{eventId}")
     public Long getView(@PathVariable long eventId) {

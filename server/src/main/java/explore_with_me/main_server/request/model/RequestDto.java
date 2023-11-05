@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Request DTO object
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

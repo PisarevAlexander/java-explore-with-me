@@ -13,6 +13,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Public category controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/categories")
@@ -22,6 +26,14 @@ public class PublicCategoryController {
 
     private final CategoryService categoryService;
 
+    /**
+     * Find all categories
+     * GET /categories
+     * @param from
+     * @param size
+     * @return the list categories json
+     */
+
     @GetMapping
     public List<Category> findAll(@PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                   @Positive @RequestParam(defaultValue = "10") Integer size) {
@@ -29,6 +41,13 @@ public class PublicCategoryController {
         Pageable pageable = new OffsetBasedPageRequest(from, size);
         return categoryService.getAll(pageable);
     }
+
+    /**
+     * Find category by id
+     * GET /categories/{catId}
+     * @param catId the category id
+     * @return category json
+     */
 
     @GetMapping("/{catId}")
     public Category findById(@PathVariable Integer catId) {

@@ -6,8 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Category repository.
+ */
+
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
+
+    /**
+     * Find Category by name.
+     * @param name the name
+     * @return the Category optional
+     */
 
     Optional<Category> findByName(String name);
 }

@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Category object
+ */
+
 @Entity
 @Table(name = "categories")
 @Data

@@ -1,10 +1,16 @@
 package explore_with_me.main_server;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+
+/**
+ * Offset based page request
+ */
 
 public class OffsetBasedPageRequest implements Pageable, Serializable {
 
@@ -13,6 +19,13 @@ public class OffsetBasedPageRequest implements Pageable, Serializable {
     private int limit;
     private int offset;
     private final Sort sort;
+
+    /**
+     * Instantiates a new Offset based page request.
+     * @param offset the offset
+     * @param limit  the limit
+     * @param sort   the sort
+     */
 
     public OffsetBasedPageRequest(int offset, int limit, Sort sort) {
         if (offset < 0) {
@@ -26,6 +39,12 @@ public class OffsetBasedPageRequest implements Pageable, Serializable {
         this.offset = offset;
         this.sort = sort;
     }
+
+    /**
+     * Instantiates a new Offset based page request
+     * @param offset the offset
+     * @param limit  the limit
+     */
 
     public OffsetBasedPageRequest(int offset, int limit) {
         this(offset, limit, Sort.unsorted());
@@ -55,6 +74,11 @@ public class OffsetBasedPageRequest implements Pageable, Serializable {
     public Pageable next() {
         return new OffsetBasedPageRequest((int) (getOffset() + getPageSize()), getPageSize(), getSort());
     }
+
+    /**
+     * Previous offset based page request
+     * @return the offset based page request
+     */
 
     public OffsetBasedPageRequest previous() {
         return hasPrevious() ? new OffsetBasedPageRequest((int) (getOffset() - getPageSize()), getPageSize(), getSort()) : this;

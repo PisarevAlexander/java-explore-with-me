@@ -14,6 +14,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Public comment controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/comments")
@@ -22,6 +26,15 @@ import java.util.List;
 public class PublicCommentController {
 
     private final CommentService commentService;
+
+    /**
+     * Gets all comments
+     * GET /comments/{eventId}
+     * @param eventId the event id
+     * @param from    the from
+     * @param size    the size
+     * @return list comments json
+     */
 
     @GetMapping("/{eventId}")
     public List<CommentReturnDto> getAll(@PathVariable Long eventId,

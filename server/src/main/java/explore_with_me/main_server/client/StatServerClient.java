@@ -13,9 +13,19 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Stat client
+ */
+
 @Service
 @Slf4j
 public class StatServerClient extends BaseServerClient {
+
+    /**
+     * Instantiates a new Stat client
+     * @param serverUrl the server url
+     * @param builder   the builder
+     */
 
     @Autowired
     public StatServerClient(@Value("${stats-client.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -26,6 +36,11 @@ public class StatServerClient extends BaseServerClient {
         );
     }
 
+    /**
+     * Create stat
+     * @param request the request
+     */
+
     public void createStat(HttpServletRequest request) {
         StatServerDto statDto = new StatServerDto();
         statDto.setIp(request.getRemoteAddr());
@@ -35,6 +50,13 @@ public class StatServerClient extends BaseServerClient {
         log.info("POST request to stat client");
         post("/hit", statDto);
     }
+
+    /**
+     * Gets view
+     * GET /view/{eventId}
+     * @param eventId the event id
+     * @return the view
+     */
 
     public Long getView(Long eventId) {
         Map<String, Object> parameters = Map.of(

@@ -11,6 +11,10 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+/**
+ * Event update DTO object
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +30,9 @@ public class EventUpdateDto {
     @Size(max = 7000, message = "description size to long")
     private String description;
 
+    /**
+     * The Event date.
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 

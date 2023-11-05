@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+
+/**
+ * Request update status dto object
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

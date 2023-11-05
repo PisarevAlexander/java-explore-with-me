@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Stat hits dto object
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

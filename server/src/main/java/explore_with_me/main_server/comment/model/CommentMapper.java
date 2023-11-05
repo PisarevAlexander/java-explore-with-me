@@ -1,6 +1,16 @@
 package explore_with_me.main_server.comment.model;
 
+/**
+ * Comment mapper
+ */
+
 public class CommentMapper {
+
+    /**
+     * Comment to Comment Return DTO
+     * @param comment the comment
+     * @return the comment return DTO
+     */
 
     public static CommentReturnDto toCommentReturnDto(Comment comment) {
         CommentReturnDto commentReturnDto = new CommentReturnDto();

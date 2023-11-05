@@ -1,5 +1,9 @@
 package explore_with_me.main_server.event.model;
 
+/**
+ * The enum Admin state
+ */
+
 public enum AdminState {
 
     PUBLISH_EVENT,

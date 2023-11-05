@@ -14,6 +14,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+
+/**
+ * Stat service
+ */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,11 +27,26 @@ public class StatServiceImpl implements StatService {
 
     public final StatisticRepository repository;
 
+    /**
+     * Create stat
+     * @param statDto the stat dto
+     * @return the stat
+     */
+
     @Override
     @Transactional
     public Stat create(StatDto statDto) {
         return repository.save(StatMapper.toStat(statDto));
     }
+
+    /**
+     * Get stat
+     * @param start  the start
+     * @param end    the end
+     * @param uris   the uris
+     * @param unique the unique
+     * @return the stat
+     */
 
     @Override
     @Transactional
@@ -48,6 +68,12 @@ public class StatServiceImpl implements StatService {
         }
         return statHitsDtos;
     }
+
+    /**
+     * Get views
+     * @param eventId the event id
+     * @return the views
+     */
 
     @Override
     @Transactional

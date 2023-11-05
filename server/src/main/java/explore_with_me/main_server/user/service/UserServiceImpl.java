@@ -13,12 +13,22 @@ import explore_with_me.main_server.exception.NotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * User service
+ */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+
+    /**
+     * Create user
+     * @param userDto the user dto
+     * @return the user
+     */
 
     @Override
     public User create(UserDto userDto) {
@@ -28,11 +38,22 @@ public class UserServiceImpl implements UserService {
         return repository.save(UserMapper.toUser(userDto));
     }
 
+    /**
+     * Get by id.
+     * @param userId the user id
+     * @return the user
+     */
+
     @Override
     public User getById(Long userId) {
         return repository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with Id=" + userId + " not found"));
     }
+
+    /**
+     * Delete user
+     * @param userId the user id
+     */
 
     @Override
     public List<User> getAll(List<Long> ids, Pageable pageable) {
@@ -41,6 +62,11 @@ public class UserServiceImpl implements UserService {
         }
         return repository.findAll(pageable).getContent();
     }
+
+    /**
+     * Delete user
+     * @param userId the user id
+     */
 
     @Override
     public void delete(Long userId) {

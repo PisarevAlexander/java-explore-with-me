@@ -12,9 +12,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Error handler
+ */
+
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
+
+    /**
+     * Handle validation exceptions map
+     * @param ex the exception
+     * @return the map
+     */
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -29,6 +39,12 @@ public class ErrorHandler {
         return errors;
     }
 
+    /**
+     * Handle missing params error response.
+     * @param e the exception
+     * @return the error response
+     */
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMissingParams(MissingServletRequestParameterException e) {
@@ -36,6 +52,11 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
+    /**
+     * Handle throwable map.
+     * @param e the exception
+     * @return the map
+     */
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -48,6 +69,12 @@ public class ErrorHandler {
                 "error", e.getMessage()
         );
     }
+
+    /**
+     * Handle bad request exception error response.
+     * @param e the exception
+     * @return the error response
+     */
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

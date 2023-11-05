@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Stat object
+ */
+
 @Entity
 @Table(name = "stats")
 @Data

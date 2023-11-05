@@ -15,10 +15,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Stat client
+ */
+
 @Service
 public class StatClient extends BaseClient {
 
+    /**
+     * The constant DATE_TIME_FORMATTER
+     */
+
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * Instantiates a new Stat client.
+     * @param serverUrl the server url
+     * @param builder   the builder
+     */
 
     @Autowired
     public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -30,9 +44,24 @@ public class StatClient extends BaseClient {
         );
     }
 
+    /**
+     * Create stat response entity.
+     * @param statDto the stat dto
+     * @return the response entity
+     */
+
     public ResponseEntity<Object> createStat(StatDto statDto) {
         return post("/hit", statDto);
     }
+
+    /**
+     * Get stat
+     * @param start  the start
+     * @param end    the end
+     * @param uris   the uris
+     * @param unique the unique
+     * @return the stat
+     */
 
     public ResponseEntity<Object> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (start.isAfter(end)) {
@@ -58,6 +87,12 @@ public class StatClient extends BaseClient {
         }
         return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
+
+    /**
+     * Find view response entity
+     * @param eventId the event id
+     * @return the response entity
+     */
 
     public ResponseEntity<Object> findView(Long eventId) {
         Map<String, Object> parameters = Map.of(

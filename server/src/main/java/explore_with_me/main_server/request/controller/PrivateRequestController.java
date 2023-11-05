@@ -9,6 +9,10 @@ import explore_with_me.main_server.request.service.RequestService;
 
 import java.util.List;
 
+/**
+ * Private request controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users/{userId}/requests")
@@ -17,11 +21,26 @@ public class PrivateRequestController {
 
     private final RequestService requestService;
 
+    /**
+     * Find all requests by user
+     * GET /users/{userId}/requests
+     * @param userId the user id
+     * @return the list of request json
+     */
+
     @GetMapping
     public List<RequestDto> findAllByUser(@PathVariable Long userId) {
         log.info("Get requests by userId={}", userId);
         return requestService.findAllByUser(userId);
     }
+
+    /**
+     * Create request
+     * POST /users/{userId}/requests
+     * @param userId  the user id
+     * @param eventId the event id
+     * @return the request dto json
+     */
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,6 +48,14 @@ public class PrivateRequestController {
         log.info("Create request by userId={} for eventId={}", userId, eventId);
         return requestService.create(userId, eventId);
     }
+
+    /**
+     * Update request
+     * PATCH /users/{userId}/requests/{requestId}/cancel
+     * @param userId    the user id
+     * @param requestId the request id
+     * @return the request dto json
+     */
 
     @PatchMapping("/{requestId}/cancel")
     public RequestDto update(@PathVariable Long userId, @PathVariable Long requestId) {

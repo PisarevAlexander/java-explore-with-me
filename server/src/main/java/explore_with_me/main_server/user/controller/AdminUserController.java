@@ -16,6 +16,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Admin user controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/users")
@@ -25,12 +29,28 @@ public class AdminUserController {
 
     private final UserService userService;
 
+    /**
+     * Create user.
+     * POST /admin/users
+     * @param userDto the user dto
+     * @return the user json
+     */
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody UserDto userDto) {
         log.info("Create user = {}", userDto);
         return userService.create(userDto);
     }
+
+    /**
+     * Find all users
+     * GET /admin/users
+     * @param ids  the id list
+     * @param from the from
+     * @param size the size
+     * @return the list of users json
+     */
 
     @GetMapping
     public List<User> findAll(@RequestParam(required = false) List<Long> ids,
@@ -40,6 +60,12 @@ public class AdminUserController {
         log.info("Get users ids = {}", ids);
         return userService.getAll(ids, pageable);
     }
+
+    /**
+     * Delete user
+     * DELETE /admin/users/{userId}
+     * @param userId the user id
+     */
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

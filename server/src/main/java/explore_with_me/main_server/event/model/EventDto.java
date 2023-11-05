@@ -11,6 +11,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+/**
+ * Event DTO object
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,6 +32,9 @@ public class EventDto {
     @Size(max = 7000, message = "description size to long")
     private String description;
 
+    /**
+     * The Event date.
+     */
     @NotNull(message = "eventDate can't be null")
     @Future
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

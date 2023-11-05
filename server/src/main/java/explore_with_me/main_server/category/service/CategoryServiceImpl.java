@@ -16,6 +16,10 @@ import explore_with_me.main_server.exception.ConflictException;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Category service
+ */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -24,6 +28,12 @@ public class CategoryServiceImpl implements CategoryService {
     public final CategoryRepository categoryRepository;
     public final EventRepository eventRepository;
 
+    /**
+     * Create category
+     * @param categoryDto the category dto
+     * @return the category
+     */
+
     @Override
     public Category create(CategoryDto categoryDto) {
         if (categoryRepository.findByName(categoryDto.getName()).isPresent()) {
@@ -31,6 +41,11 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return categoryRepository.save(CategoryMapper.toCategory(categoryDto));
     }
+
+    /**
+     * Delete category
+     * @param catId the cat id
+     */
 
     @Override
     public void delete(Integer catId) {
@@ -42,6 +57,13 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ConflictException("Events include delete category");
         }
     }
+
+    /**
+     * Update category
+     * @param catId            the cat id
+     * @param categoryAdminDto the category admin dto
+     * @return the category
+     */
 
     @Override
     public Category update(Integer catId, CategoryAdminDto categoryAdminDto) {
@@ -56,10 +78,22 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
+    /**
+     * Gets all category
+     * @param pageable the pageable
+     * @return the all
+     */
+
     @Override
     public List<Category> getAll(Pageable pageable) {
         return categoryRepository.findAll(pageable).getContent();
     }
+
+    /**
+     * Find category by id
+     * @param catId the cat id
+     * @return the category
+     */
 
     @Override
     public Category findById(Integer catId) {

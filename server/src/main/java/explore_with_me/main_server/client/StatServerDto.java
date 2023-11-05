@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Stat Server DTO object
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -17,6 +17,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Admin comment controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/comments")
@@ -26,6 +30,12 @@ public class AdminCommentController {
 
     private final CommentService commentService;
 
+    /**
+     * Delete comment by id
+     * DELETE /admin/comments/{commentId}
+     * @param commentId the comment id
+     */
+
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long commentId) {
@@ -33,12 +43,29 @@ public class AdminCommentController {
         commentService.deleteByAdmin(commentId);
     }
 
+    /**
+     * Update comment by admin
+     * PATCH /admin/comments/{commentId}
+     * @param commentDto the comment dto
+     * @param commentId  the comment id
+     * @return the comment dto json
+     */
+
     @PatchMapping("/{commentId}")
     public CommentReturnDto updateByAdmin(@Valid @RequestBody CommentDto commentDto,
                                           @PathVariable Long commentId) {
         log.info("Update comment by id = {}", commentId);
         return commentService.updateByAdmin(commentDto, commentId);
     }
+
+    /**
+     * Gets all comment by event
+     * GET /admin/comments/{eventId}
+     * @param eventId the event id
+     * @param from    the from
+     * @param size    the size
+     * @return list comment json
+     */
 
     @GetMapping("/{eventId}")
     public List<CommentReturnDto> getAll(@PathVariable Long eventId,

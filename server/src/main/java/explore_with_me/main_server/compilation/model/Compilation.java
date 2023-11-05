@@ -8,6 +8,10 @@ import explore_with_me.main_server.event.model.Event;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Compilation object
+ */
+
 @Entity
 @Table(name = "compilations")
 @Data

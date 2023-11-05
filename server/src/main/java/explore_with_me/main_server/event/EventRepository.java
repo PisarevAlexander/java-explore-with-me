@@ -14,15 +14,55 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Event repository
+ */
+
 public interface EventRepository extends JpaRepository<Event, Long> {
+
+    /**
+     * Find all by category list.
+     * @param category the category
+     * @return the list of events
+     */
 
     List<Event> findAllByCategory(Category category);
 
+    /**
+     * Find all by id
+     * @param ids the ids
+     * @return the list of events
+     */
+
     List<Event> findAllByIdIn(List<Long> ids);
+
+    /**
+     * Find by initiator
+     * @param initiator the initiator
+     * @param pageable  the pageable
+     * @return the page of events
+     */
 
     Page<Event> findByInitiator(User initiator, Pageable pageable);
 
+    /**
+     * Find by id and initiator
+     * @param eventId the event id
+     * @param userId  the user id
+     * @return the event optional
+     */
+
     Optional<Event> findByIdAndInitiator(Long eventId, User userId);
+
+    /**
+     * Find all events by public
+     * @param text       the text
+     * @param categories the categories
+     * @param paid       the paid
+     * @param rangeStart the range start
+     * @param pageable   the pageable
+     * @return the page of events
+     */
 
     @Query("SELECT new explore_with_me.main_server.event.model.Event(e.id, e.annotation, e.category, e.confirmedRequests," +
             "e.createdOn, e.description, e.eventDate, e.initiator, e.location, e.paid, e.participantLimit, e.publishedOn, " +
@@ -39,6 +79,17 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                             @Param("now") LocalDateTime rangeStart,
                                             Pageable pageable);
 
+    /**
+     * Find all events by public parameter page
+     * @param text       the text
+     * @param categories the categories
+     * @param paid       the paid
+     * @param rangeStart the range start
+     * @param rangeEnd   the range end
+     * @param pageable   the pageable
+     * @return the page of events
+     */
+
     @Query("SELECT new explore_with_me.main_server.event.model.Event(e.id, e.annotation, e.category, e.confirmedRequests, " +
             "e.createdOn, e.description, e.eventDate, e.initiator, e.location, e.paid, e.participantLimit, e.publishedOn, " +
             "e.requestModeration, e.state, e.title, e.views) " +
@@ -54,6 +105,17 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                       @Param("paid") Boolean paid,
                                       @Param("rangeStart") LocalDateTime rangeStart,
                                       @Param("rangeEnd") LocalDateTime rangeEnd, Pageable pageable);
+
+    /**
+     * Find events by admin parameter page
+     * @param users      the users
+     * @param states     the states
+     * @param categories the categories
+     * @param rangeStart the range start
+     * @param rangeEnd   the range end
+     * @param pageable   the pageable
+     * @return the page of events
+     */
 
     @Query("SELECT new explore_with_me.main_server.event.model.Event(e.id, e.annotation, e.category, e.confirmedRequests, " +
             "e.createdOn, e.description, e.eventDate, e.initiator, e.location, e.paid, e.participantLimit, e.publishedOn, " +

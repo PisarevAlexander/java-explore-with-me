@@ -8,6 +8,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * User DTO object
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

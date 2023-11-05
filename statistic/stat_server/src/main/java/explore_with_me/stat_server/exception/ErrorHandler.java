@@ -8,9 +8,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
+/**
+ * Error handler
+ */
+
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
+
+    /**
+     * Handle throwable map
+     * @param e the e
+     * @return the map
+     */
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

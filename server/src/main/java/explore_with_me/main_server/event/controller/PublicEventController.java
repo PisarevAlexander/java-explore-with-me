@@ -18,6 +18,10 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Public event controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("events")
@@ -26,6 +30,21 @@ import java.util.List;
 public class PublicEventController {
 
     private final EventService eventService;
+
+    /**
+     * Find all events by search
+     * @param text          the text
+     * @param categories    the categories list
+     * @param paid          the paid
+     * @param rangeStart    the range start
+     * @param rangeEnd      the range end
+     * @param onlyAvailable the only available
+     * @param sort          the sort
+     * @param from          the from
+     * @param size          the size
+     * @param request       the request
+     * @return the list of events json
+     */
 
     @GetMapping
     public List<Event> findAllBySearch(@RequestParam(required = false) String text,
@@ -48,6 +67,13 @@ public class PublicEventController {
         return eventService.findAllBySearch(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, pageable,
                 request);
     }
+
+    /**
+     * Find event by id
+     * @param id      the id
+     * @param request the request
+     * @return the event json
+     */
 
     @GetMapping("/{id}")
     public Event findEventById(@PathVariable Long id, HttpServletRequest request) {

@@ -17,6 +17,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Private comment controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -26,6 +30,15 @@ public class PrivateCommentController {
 
     private final CommentService commentService;
 
+    /**
+     * Create comment
+     * POST /users/{userId}/comments/{eventId}
+     * @param commentDto the comment dto
+     * @param userId     the user id
+     * @param eventId    the event id
+     * @return comment dto json
+     */
+
     @PostMapping("/{userId}/comments/{eventId}")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentReturnDto create(@Valid @RequestBody CommentDto commentDto, @PathVariable Long userId,
@@ -34,6 +47,15 @@ public class PrivateCommentController {
         return commentService.save(commentDto, userId, eventId);
     }
 
+    /**
+     * Update comment by user
+     * PATCH /users/{userId}/comments/{commentId}
+     * @param commentDto the comment dto
+     * @param userId     the user id
+     * @param commentId  the comment id
+     * @return comment dto json
+     */
+
     @PatchMapping("/{userId}/comments/{commentId}")
     public CommentReturnDto updateByUser(@Valid @RequestBody CommentDto commentDto, @PathVariable Long userId,
                                 @PathVariable Long commentId) {
@@ -41,11 +63,27 @@ public class PrivateCommentController {
         return commentService.updateByUser(commentDto, userId, commentId);
     }
 
+    /**
+     * Delete comment by user
+     * DELETE /users/{userId}/comments/{commentId}
+     * @param userId    the user id
+     * @param commentId the comment id
+     */
+
     @DeleteMapping("/{userId}/comments/{commentId}")
     public void delete(@PathVariable Long userId, @PathVariable Long commentId) {
         log.info("Delete comment by id = {}", commentId);
         commentService.deleteByUser(userId, commentId);
     }
+
+    /**
+     * Gets all comments by user
+     * GET /users/comments/{eventId}
+     * @param eventId the event id
+     * @param from    the from
+     * @param size    the size
+     * @return list comments json
+     */
 
     @GetMapping("/comments/{eventId}")
     public List<CommentReturnDto> getAll(@PathVariable Long eventId,

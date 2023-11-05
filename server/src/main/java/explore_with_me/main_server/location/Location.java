@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Location object
+ */
 
 @Entity
 @Table(name = "locations")

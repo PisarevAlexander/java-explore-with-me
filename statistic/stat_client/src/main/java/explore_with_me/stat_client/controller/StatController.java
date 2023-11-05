@@ -15,6 +15,10 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Stat controller
+ */
+
 @Controller
 @RequestMapping
 @RequiredArgsConstructor
@@ -25,11 +29,28 @@ public class StatController {
     private final StatClient statClient;
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    /**
+     * Create stat response entity.
+     * POST /hit
+     * @param statDto the stat dto
+     * @return the response entity
+     */
+
     @PostMapping("/hit")
     public ResponseEntity<Object> createStat(@Valid @RequestBody StatDto statDto) {
         log.info("Post statistic request");
         return statClient.createStat(statDto);
     }
+
+    /**
+     * Get stats
+     * GET /stats
+     * @param start  the start
+     * @param end    the end
+     * @param uris   the uris
+     * @param unique the unique
+     * @return the stats
+     */
 
     @GetMapping("/stats")
     public ResponseEntity<Object> getStats(@RequestParam @NotNull @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime start,
@@ -39,6 +60,13 @@ public class StatController {
         log.info("Get statistic request");
         return statClient.getStat(start, end, uris, unique);
     }
+
+    /**
+     * Find view response entity.
+     * GET /view/{eventId}
+     * @param eventId the event id
+     * @return the response entity
+     */
 
     @GetMapping("/view/{eventId}")
     public ResponseEntity<Object> findView(@PathVariable Long eventId) {

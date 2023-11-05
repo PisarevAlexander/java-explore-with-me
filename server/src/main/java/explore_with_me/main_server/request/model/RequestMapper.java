@@ -1,6 +1,16 @@
 package explore_with_me.main_server.request.model;
 
+/**
+ * Request mapper
+ */
+
 public class RequestMapper {
+
+    /**
+     * Request to request dto.
+     * @param request the request
+     * @return the request dto
+     */
 
     public static RequestDto toRequestDto(Request request) {
         RequestDto requestDto = new RequestDto();
@@ -11,5 +21,4 @@ public class RequestMapper {
         requestDto.setStatus(request.getStatus().toString());
         return requestDto;
     }
-
 }

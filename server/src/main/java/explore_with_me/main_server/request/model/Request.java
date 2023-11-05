@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Request object
+ */
+
 @Entity
 @Table(name = "requests")
 @Data

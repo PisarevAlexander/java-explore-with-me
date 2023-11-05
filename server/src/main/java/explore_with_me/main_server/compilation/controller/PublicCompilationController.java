@@ -12,6 +12,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
+/**
+ * Public compilation controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/compilations")
@@ -19,6 +23,14 @@ import java.util.Collection;
 public class PublicCompilationController {
 
     private final CompilationService compilationService;
+
+    /**
+     * Find all compilation
+     * @param pinned the pinned
+     * @param from   the from
+     * @param size   the size
+     * @return the collection compilation json
+     */
 
     @GetMapping
     public Collection<Compilation> findAll(@RequestParam(required = false) Boolean pinned,
@@ -28,6 +40,12 @@ public class PublicCompilationController {
         log.info("Get collection");
         return compilationService.findAll(pinned, pageable);
     }
+
+    /**
+     * Find  compilation by id
+     * @param compId the compilation id
+     * @return the compilation json
+     */
 
     @GetMapping("/{compId}")
     public Compilation findById(@PathVariable Long compId) {

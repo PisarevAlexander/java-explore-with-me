@@ -20,6 +20,11 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+
+/**
+ * Private event controller
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("users/{userId}/events")
@@ -28,6 +33,14 @@ import java.util.List;
 public class PrivateEventController {
 
     private final EventService eventService;
+
+    /**
+     * Find all list
+     * @param userId the user id
+     * @param from   the from
+     * @param size   the size
+     * @return the list of event json
+     */
 
     @GetMapping
     public List<Event> findAll(@PathVariable Long userId,
@@ -38,6 +51,13 @@ public class PrivateEventController {
         return eventService.findAll(userId, pageable);
     }
 
+    /**
+     * Create event
+     * @param eventDto the event dto
+     * @param userId   the user id
+     * @return the event json
+     */
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Event create(@Valid @RequestBody EventDto eventDto, @PathVariable Long userId) {
@@ -45,11 +65,26 @@ public class PrivateEventController {
         return eventService.save(userId, eventDto);
     }
 
+    /**
+     * Find event by id
+     * @param userId  the user id
+     * @param eventId the event id
+     * @return the event json
+     */
+
     @GetMapping("/{eventId}")
     public Event findById(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Get event by userId = {}, eventId = {}", userId, eventId);
         return eventService.findByEventAndUserId(userId, eventId);
     }
+
+    /**
+     * Update event by id
+     * @param userId            the user id
+     * @param eventId           the event id
+     * @param eventUpdateDtoDto the event update DTO
+     * @return the event json
+     */
 
     @PatchMapping("/{eventId}")
     public Event update(@PathVariable Long userId, @PathVariable Long eventId,
@@ -58,11 +93,26 @@ public class PrivateEventController {
         return eventService.update(userId, eventId, eventUpdateDtoDto);
     }
 
+    /**
+     * Find requests
+     * @param userId  the user id
+     * @param eventId the event id
+     * @return the list of requests json
+     */
+
     @GetMapping("/{eventId}/requests")
     public List<RequestDto> findRequest(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Get request for userId = {}, eventId = {}", userId, eventId);
         return eventService.findRequest(userId, eventId);
     }
+
+    /**
+     * Update request
+     * @param userId                 the user id
+     * @param eventId                the event id
+     * @param requestUpdateStatusDto the request update status dto
+     * @return the request update dto json
+     */
 
     @PatchMapping("/{eventId}/requests")
     public RequestUpdateDto updateRequest(@PathVariable Long userId, @PathVariable Long eventId,

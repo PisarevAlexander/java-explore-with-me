@@ -1,6 +1,16 @@
 package explore_with_me.main_server.event.model;
 
+/**
+ * Event mapper
+ */
+
 public class EventMapper {
+
+    /**
+     * Event DTO to event
+     * @param eventDto the event dto
+     * @return the event
+     */
 
     public static Event toEvent(EventDto eventDto) {
         Event event = new Event();

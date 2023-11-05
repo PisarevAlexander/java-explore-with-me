@@ -16,6 +16,10 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Compilation service
+ */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -23,6 +27,12 @@ public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
+
+    /**
+     * Create compilation
+     * @param compilationDto the compilation dto
+     * @return the compilation
+     */
 
     @Override
     public Compilation create(CompilationDto compilationDto) {
@@ -32,12 +42,24 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationRepository.save(compilation);
     }
 
+    /**
+     * Delete compilation
+     * @param compId the compilation id
+     */
+
     @Override
     public void delete(Long compId) {
         compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Compilation with id=" + compId + " not found"));
         compilationRepository.deleteById(compId);
     }
+
+    /**
+     * Update compilation
+     * @param compId              the compilation id
+     * @param compilationAdminDto the compilation admin dto
+     * @return the compilation
+     */
 
     @Override
     public Compilation update(Long compId, CompilationAdminDto compilationAdminDto) {
@@ -56,6 +78,13 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationRepository.save(compilation);
     }
 
+    /**
+     * Find all collection
+     * @param pinned   the pinned
+     * @param pageable the pageable
+     * @return the collection
+     */
+
     @Override
     public Collection<Compilation> findAll(Boolean pinned, Pageable pageable) {
         if (pinned != null) {
@@ -64,6 +93,12 @@ public class CompilationServiceImpl implements CompilationService {
             return compilationRepository.findAll(pageable).getContent();
         }
     }
+
+    /**
+     * Find compilation by id
+     * @param compId the compilation id
+     * @return the compilation
+     */
 
     @Override
     public Compilation findById(Long compId) {

@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Comment service
+ */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,6 +33,11 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final EventService eventService;
+
+    /**
+     * Delete comment by admin.
+     * @param commentId the comment id
+     */
 
     @Override
     public void deleteByAdmin(Long commentId) {
@@ -39,6 +48,13 @@ public class CommentServiceImpl implements CommentService {
                         });
     }
 
+    /**
+     * Update comment by admin
+     * @param commentDto the comment dto
+     * @param commentId  the comment id
+     * @return the comment return dto
+     */
+
     @Override
     public CommentReturnDto updateByAdmin(CommentDto commentDto, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
@@ -48,6 +64,13 @@ public class CommentServiceImpl implements CommentService {
 
         return CommentMapper.toCommentReturnDto(commentRepository.save(comment));
     }
+
+    /**
+     * Gets all comment
+     * @param eventId  the event id
+     * @param pageable the pageable
+     * @return list of comments
+     */
 
     @Override
     public List<CommentReturnDto> getAll(Long eventId, Pageable pageable) {
@@ -62,6 +85,14 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Save comment
+     * @param commentDto the comment dto
+     * @param userId     the user id
+     * @param eventId    the event id
+     * @return the comment return DTO
+     */
+
     @Override
     public CommentReturnDto save(CommentDto commentDto, Long userId, Long eventId) {
         User user = userService.getById(userId);
@@ -74,6 +105,14 @@ public class CommentServiceImpl implements CommentService {
         comment.setText(commentDto.getText());
         return CommentMapper.toCommentReturnDto(commentRepository.save(comment));
     }
+
+    /**
+     * Update comment by user
+     * @param commentDto the comment dto
+     * @param userId     the user id
+     * @param commentId  the comment id
+     * @return the comment return dto
+     */
 
     @Override
     public CommentReturnDto updateByUser(CommentDto commentDto, Long userId, Long commentId) {
@@ -89,6 +128,12 @@ public class CommentServiceImpl implements CommentService {
         comment.setText(commentDto.getText());
         return CommentMapper.toCommentReturnDto(commentRepository.save(comment));
     }
+
+    /**
+     * Delete by user
+     * @param userId    the user id
+     * @param commentId the comment id
+     */
 
     @Override
     public void deleteByUser(Long userId, Long commentId) {

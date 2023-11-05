@@ -23,6 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Request service
+ */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -32,6 +36,12 @@ public class RequestServiceImpl implements RequestService {
     private final UserService userService;
     private final EventService eventService;
     private final EventRepository eventRepository;
+
+    /**
+     * Find all requests
+     * @param userID the user id
+     * @return the list of requests
+     */
 
     @Override
     public List<RequestDto> findAllByUser(Long userId) {
@@ -44,6 +54,13 @@ public class RequestServiceImpl implements RequestService {
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Create request
+     * @param userId  the user id
+     * @param eventId the event id
+     * @return the request dto
+     */
 
     @Override
     public RequestDto create(Long userId, Long eventId) {
@@ -76,6 +93,13 @@ public class RequestServiceImpl implements RequestService {
         }
         return RequestMapper.toRequestDto(requestRepository.save(request));
     }
+
+    /**
+     * Update request
+     * @param userId    the user id
+     * @param requestId the request id
+     * @return the request dto
+     */
 
     @Override
     public RequestDto update(Long userId, Long requestId) {
